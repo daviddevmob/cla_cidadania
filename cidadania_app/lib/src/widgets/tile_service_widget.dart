@@ -1,3 +1,4 @@
+import 'package:cidadania_app/src/models/business_model.dart';
 import 'package:cidadania_app/src/routes/route_name.dart';
 import 'package:cidadania_app/src/styles/color_style.dart';
 import 'package:cidadania_app/src/styles/text_style.dart';
@@ -6,13 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TileServiceWidget extends StatelessWidget {
-  const TileServiceWidget({Key? key}) : super(key: key);
+  final BusinessModel businessModel;
+  const TileServiceWidget({Key? key, required this.businessModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        Get.toNamed(RouteName.profile);
+        Get.toNamed(RouteName.profile, arguments: businessModel.id);
       },
       leading: CircleAvatar(
         backgroundImage: NetworkImage(
@@ -22,11 +24,11 @@ class TileServiceWidget extends StatelessWidget {
         onBackgroundImageError: (exception, stackTrace) => SizedBox(),
       ),
       title: Text(
-        "Padeiro",
+        businessModel.name,
         style: CustomStyle.medium,
       ),
       subtitle: Text(
-        "Entrega em domicílio",
+        businessModel.category + " | "+(businessModel.delivery ? "Entrega em domicílio" : ""),
         style: CustomStyle.little,
       ),
       trailing: Icon(CupertinoIcons.forward, color: CustomColors.primaryColor,),

@@ -1,3 +1,4 @@
+import 'package:cidadania_app/src/blinds/core_blinds.dart';
 import 'package:cidadania_app/src/routes/route_name.dart';
 import 'package:cidadania_app/src/screens/home_screen.dart';
 import 'package:cidadania_app/src/screens/login_screen.dart';
@@ -14,36 +15,43 @@ class RoutePages {
     GetPage(
       name: RouteName.splash,
       page: () => SplashScreen(),
+      binding: CoreBlinds(),
       transition: Transition.noTransition,
     ),
     GetPage(
       name: RouteName.home,
       page: () => HomeScreen(),
+      binding: CoreBlinds(),
       transition: Transition.noTransition,
     ),
     GetPage(
       name: RouteName.profile,
       page: () => ProfileScreen(),
+      binding: CoreBlinds(),
       transition: Transition.noTransition,
     ),
     GetPage(
       name: RouteName.adm_home,
       page: () => AdmHomeScreen(),
+      binding: CoreBlinds(),
       transition: Transition.noTransition,
     ),
     GetPage(
       name: RouteName.adm_add,
       page: () => AdmAddProfileScreen(),
+      binding: CoreBlinds(),
       transition: Transition.noTransition,
     ),
     GetPage(
       name: RouteName.adm_edit,
       page: () => AdmEditProfileScreen(),
+      binding: CoreBlinds(),
       transition: Transition.noTransition,
     ),
     GetPage(
       name: RouteName.login,
       page: () => LoginScreen(),
+      binding: CoreBlinds(),
       transition: Transition.noTransition,
     ),
   ];

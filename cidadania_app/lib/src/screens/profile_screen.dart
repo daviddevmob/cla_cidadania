@@ -1,4 +1,6 @@
 import 'package:carousel_images/carousel_images.dart';
+import 'package:cidadania_app/src/controllers/business_controller.dart';
+import 'package:cidadania_app/src/models/business_model.dart';
 import 'package:cidadania_app/src/screens/view_photo_screen.dart';
 import 'package:cidadania_app/src/styles/color_style.dart';
 import 'package:cidadania_app/src/styles/text_style.dart';
@@ -7,9 +9,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final BusinessController businessController = Get.find();
+  late BusinessModel businessModel;
+  bool loaded = false;
+
+  getBusinessModel() async {
+    int id = Get.arguments;
+    businessModel = await businessController.getOnlyBusiness(businessId: id);
+    loaded = true;
+    setState(() {
+      
+    });
+  }
+  @override
+  void initState() {
+    getBusinessModel();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +54,15 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: loaded == false
+      ? Center(
+        child: SizedBox(
+          height: 50,
+          width: 50,
+          child: CircularProgressIndicator.adaptive()
+          ),
+      )
+      : SingleChildScrollView(
         child: Align(
           alignment: Alignment.center,
           child: Padding(
@@ -53,14 +85,14 @@ class ProfileScreen extends StatelessWidget {
                   height: 15,
                 ),
                 Text(
-                  "Padeiro",
+                  businessModel.name,
                   style: CustomStyle.title,
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 Text(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                 businessModel.description ?? "",
                   style: CustomStyle.medium,
                 ),
                 SizedBox(
@@ -69,13 +101,7 @@ class ProfileScreen extends StatelessWidget {
                 CarouselImages(
                   scaleFactor: 0.3,
                   viewportFraction: .6,
-                  listImages: [
-                    "https://images.unsplash.com/photo-1504128668912-f893e6606db6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                    "https://images.unsplash.com/photo-1532635224-cf024e66d122?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                    "https://images.unsplash.com/photo-1515823808611-65fd8e56c71a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                    "https://images.unsplash.com/photo-1513844316321-dd2466411c4c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                    "https://images.unsplash.com/photo-1532460734809-e7f8475ca917?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1437&q=80"
-                  ],
+                  listImages: businessModel.images,
                   height: 250,
                   borderRadius: 30.0,
                   cachedNetworkImage: true,
@@ -102,7 +128,11 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(
                   height: 15,
                 ),
-                ContactServiceWidget(),
+                ContactServiceWidget(
+                  whatsApp: businessModel.whatsapp,
+                  instagram: businessModel.instagram,
+                  phone: businessModel.phone,
+                ),
               ],
             ),
           ),

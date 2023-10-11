@@ -1,4 +1,4 @@
-import 'package:cidadania_app/src/controllers/home_controller.dart';
+import 'package:cidadania_app/src/controllers/business_controller.dart';
 import 'package:cidadania_app/src/routes/route_name.dart';
 import 'package:cidadania_app/src/styles/color_style.dart';
 import 'package:cidadania_app/src/styles/text_style.dart';
@@ -11,11 +11,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = HomeController();
+    final BusinessController businessController = Get.find();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 110, // Set this height
+          toolbarHeight: 122, // Set this height
           flexibleSpace: Container(
             color: CustomColors.cardBackgroud,
             child: Column(children: <Widget>[
@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                   child: Obx(
                     () => TextField(
                       textAlign: TextAlign.center,
-                      controller: homeController.searchController.value,
+                      controller: businessController.searchController.value,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10, horizontal: 10),
@@ -69,9 +69,9 @@ class HomeScreen extends StatelessWidget {
         ),
         body: ListView.builder(
           shrinkWrap: true,
-          itemCount: 50,
+          itemCount: businessController.business.length,
           physics: ScrollPhysics(),
-          itemBuilder: (context, index) => TileServiceWidget(),
+          itemBuilder: (context, index) => TileServiceWidget(businessModel: businessController.business[index],),
         ),
       ),
     );
