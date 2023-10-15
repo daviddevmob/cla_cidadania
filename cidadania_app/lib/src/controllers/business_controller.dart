@@ -10,7 +10,29 @@ class BusinessController extends GetxController {
 
   RxList<BusinessModel> business = <BusinessModel>[].obs;
   RxBool loadAllBusiness = false.obs;
+
+
+  RxList<BusinessModel> get businessSearch {
+    if(searchController.value.text.isEmpty || searchController.value.text == ""){
+      return business;
+    } else {
+      var list = business.where((busi){
+        String text = searchController.value.text;
+        if(busi.name.toLowerCase().contains(text.toLowerCase())) return true;
+        if(busi.category.toLowerCase().contains(text.toLowerCase())) return true;
+        if(busi.filters.contains(text.toLowerCase())) return true;
+        if(busi.instagram?.toLowerCase().contains(text.toLowerCase()) == true) return true;
+        if(busi.whatsapp?.toLowerCase().contains(text.toLowerCase()) == true) return true;
+        if(busi.phone?.toLowerCase().contains(text.toLowerCase()) == true) return true;
+        if(busi.description?.toLowerCase().contains(text.toLowerCase()) == true) return true;
+        return false;
+      }).toList().obs;
+      return list;
+    }
+  }
+
   getAllBusiness() async {
+    if(business.isEmpty)
     business.value = await businessRepository.getAllBusiness();
     business.refresh();
     if(business.isNotEmpty) loadAllBusiness.value = true;
@@ -25,21 +47,4 @@ class BusinessController extends GetxController {
       return business.firstWhereOrNull((element) => element.id == businessId);
     }
   }
-
-  postAddBusiness({required BusinessModel businessModel}) async {
-    var result = await businessRepository.addBusiness(businessModel: businessModel);
-    return result;
-  }
-
-  putUpdateBusiness({required BusinessModel businessModel}) async {
-    var result = await businessRepository.putBusiness(businessModel: businessModel);
-    return result;
-  }
-
-  delDeleteBusiness({required int businessId}) async {
-    var result = await businessRepository.deleteBusiness(businessId: businessId);
-    return result;
-  }
-
-  
 }

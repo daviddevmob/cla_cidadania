@@ -18,8 +18,10 @@ dependencies:
   carousel_images: ^1.1.2
   cupertino_icons: ^1.0.2
   lottie: ^1.4.2
-  flutter_stripe: ^9.4.0
   dio: ^5.3.3
+  adaptive_dialog: ^1.9.0+2
+  image_picker: ^1.0.4
+  image_compression_flutter: ^1.0.3
 
 dev_dependencies:
   flutter_test:

@@ -6,18 +6,19 @@ import 'package:flutter/material.dart';
 class DefaultButtonWidget extends StatelessWidget {
   final String title;
   final Function()? onTap;
-  const DefaultButtonWidget({super.key, required this.title, this.onTap});
+  final double? width;
+  const DefaultButtonWidget({super.key, required this.title, this.onTap, this.width});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
                 onTap: onTap,
                 child: Container(
-                  width: 300,
+                  width:width ?? 300,
                   height: 40,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),
-                    color: CustomColors.primaryColor,
+                    color: onTap == null ? CustomColors.grey : CustomColors.primaryColor,
                   ),
                   child: Center(child: Text(title, style:  CustomStyle.medium.copyWith(
                     color: Colors.white,

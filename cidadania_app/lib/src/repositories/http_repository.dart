@@ -8,7 +8,16 @@ class HttpRepository implements HttpRepositoryInterface{
   @override
   Future get({required String path}) async {
     try{
-      var result = await dio.get(RouteApi.baseURL + path);
+      var result = await dio.get(
+        RouteApi.baseURL + path,
+        options: Options(
+          headers: {
+            'account-type': 'master',
+            'Accept': 'application/json',
+            'Access-Control-Allow-Origin': true,
+          }
+        )
+      );
       return result.data;
     }catch(e){
       debugPrint(e.toString());

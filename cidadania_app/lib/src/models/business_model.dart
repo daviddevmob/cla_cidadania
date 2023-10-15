@@ -1,9 +1,14 @@
 class BusinessModel {
   int id;
   String name;
+  String businessName;
+  String? address;
+  String? mapsLink;
   String? description;
+  String? district;
   String category;
   bool delivery;
+  bool workatBusiness;
   String? image;
   String? whatsapp;
   String? instagram;
@@ -14,11 +19,16 @@ class BusinessModel {
   BusinessModel({
     required this.id,
     required this.name,
+    required this.address,
+    required this.mapsLink,
+    required this.businessName,
     required this.category,
     required this.delivery,
+    required this.workatBusiness,
     required this.images,
     required this.filters,
     this.description,
+    this.district,
     this.image,
     this.whatsapp,
     this.instagram,
@@ -33,8 +43,13 @@ class BusinessModel {
     if(data["image4"] != null) images.add(data["image4"]);
     if(data["image5"] != null) images.add(data["image5"]);
     return BusinessModel(
-      id: data["id"], 
+      id: data["id"],
       name: data["name"],  
+      businessName: data["business_name"],
+      workatBusiness: data["workatbu"],
+      address: data["address"],
+      district: data["district"], 
+      mapsLink: data["maps_link"],
       category: data["category"], 
       delivery: data["delivery"], 
       description: data["description"],
@@ -51,6 +66,11 @@ class BusinessModel {
     return {
       "name": name,
       "description": description,
+      "business_name": businessName,
+      "district": district,
+      "maps_link": mapsLink,
+      "workatbu": workatBusiness,
+      "address": address,
       "category": category,
       "delivery": delivery,
       "image": image,

@@ -37,26 +37,27 @@ class BusinessRepository implements BusinessRepositoryInterface {
   }
 
   @override
-  Future putBusiness({required BusinessModel businessModel}) async {
+  Future<BusinessModel?> putBusiness({required BusinessModel businessModel}) async {
     try{
-      var result = http.put(
+      var result = await http.put(
         path: "${RouteApi.business}${businessModel.id}", 
         data: businessModel.toJson()
       );
-      return result;
+      return BusinessModel.fromJson(data: result);
     }catch(e){
       debugPrint(e.toString());
+      return null;
     }
   }
   
   @override
-  Future addBusiness({required BusinessModel businessModel}) async {
+  Future<BusinessModel?> addBusiness({required BusinessModel businessModel}) async {
      try{
       var result = await http.post(
         path: "${RouteApi.business}", 
         data: businessModel.toJson()
       );
-      return result;
+      return BusinessModel.fromJson(data: result);
     }catch(e){
       debugPrint(e.toString());
       return null;

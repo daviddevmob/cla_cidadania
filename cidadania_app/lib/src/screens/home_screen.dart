@@ -1,5 +1,4 @@
 import 'package:cidadania_app/src/controllers/business_controller.dart';
-import 'package:cidadania_app/src/routes/route_name.dart';
 import 'package:cidadania_app/src/styles/color_style.dart';
 import 'package:cidadania_app/src/styles/text_style.dart';
 import 'package:cidadania_app/src/widgets/tile_service_widget.dart';
@@ -31,16 +30,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Spacer(),
-                TextButton(
-                  onPressed: (){
-                    Get.toNamed(RouteName.login);
-                  }, child: Text(
-                    "Entrar",
-                    style: CustomStyle.medium.copyWith(
-                      color: CustomColors.primaryColor,
-                    ),
-                  ),
-                ),
                 SizedBox(width: 15),
               ]),
               SizedBox(height: 8),
@@ -67,11 +56,13 @@ class HomeScreen extends StatelessWidget {
             ]),
           ),
         ),
-        body: ListView.builder(
-          shrinkWrap: true,
-          itemCount: businessController.business.length,
-          physics: ScrollPhysics(),
-          itemBuilder: (context, index) => TileServiceWidget(businessModel: businessController.business[index],),
+        body: Obx(
+          () => ListView.builder(
+            shrinkWrap: true,
+            itemCount: businessController.businessSearch.length,
+            physics: ScrollPhysics(),
+            itemBuilder: (context, index) => TileServiceWidget(businessModel: businessController.businessSearch[index],),
+          ),
         ),
       ),
     );

@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final int businessId;
+  const ProfileScreen({Key? key, required this.businessId}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -22,8 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool loaded = false;
 
   getBusinessModel() async {
-    int id = Get.arguments;
-    businessModel = await businessController.getOnlyBusiness(businessId: id);
+    businessModel = await businessController.getOnlyBusiness(businessId: widget.businessId);
     loaded = true;
     setState(() {
       
