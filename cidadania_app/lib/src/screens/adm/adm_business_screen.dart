@@ -6,6 +6,7 @@ import 'package:cidadania_app/src/styles/color_style.dart';
 import 'package:cidadania_app/src/styles/text_style.dart';
 import 'package:cidadania_app/src/widgets/default_button_widget.dart';
 import 'package:cidadania_app/src/widgets/default_dropdown_button_widget.dart';
+import 'package:cidadania_app/src/widgets/default_filters_widget.dart';
 import 'package:cidadania_app/src/widgets/default_radio_button_widget.dart';
 import 'package:cidadania_app/src/widgets/default_textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +61,12 @@ class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
       distric = businessModel.district;
       profileImage = businessModel.image;
       images = businessModel.images;
+      category = businessModel.category;
       worksAtHome = businessModel.delivery;
       worksAtBusinessAddress = businessModel.workatBusiness;
+      setState(() {
+        
+      });
     }
   }
 
@@ -70,6 +75,12 @@ class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
   void initState() {
     getData();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -87,7 +98,7 @@ class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      "Edição de Perfil de Negócio",
+                      isUpdate ? "Edição de Perfil de Negócio" : "Adicionar Perfil",
                       textAlign: TextAlign.center,
                       style: CustomStyle.title,
                     ),
@@ -173,7 +184,7 @@ class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
                       currentValue: category,
                       items: ["Serviço", "Produtos"],
                       onChanged: (newDistrict){
-                        distric = newDistrict;
+                        category = newDistrict;
                         setState(() {
                           
                         });
@@ -184,11 +195,46 @@ class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
                     ),
                     DefaultRadioButtonWidget(
                       list: [
-                        DefaultRadioModel(value: worksAtBusinessAddress, label: "Atende no endereço do negócio"),
-                        DefaultRadioModel(value: worksAtHome, label: "Atende em domicílio"),
+                        DefaultRadioModel(
+                          value: worksAtBusinessAddress, 
+                          label: "Atende no endereço do negócio",
+                          onTap: (){
+                            worksAtBusinessAddress = !worksAtBusinessAddress;
+                            setState(() {
+                              
+                            });
+                          }
+                        ),
+                        DefaultRadioModel(
+                          value: worksAtHome, 
+                          label: "Atende em domicílio",
+                          onTap: (){
+                            worksAtHome = !worksAtHome;
+                            setState(() {
+                              
+                            });
+                          }
+                        ),
                       ], 
                       labe: "Formas de Atendimento",
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    DefaultFiltersWidget(filters: filters, toggle: (value){
+                      int indexWhere = filters.indexWhere((element) => element == value);
+                      if(indexWhere >=0){
+                        filters.removeAt(indexWhere);
+                        setState(() {
+                          
+                        });
+                      } else {
+                        filters.add(value);
+                        setState(() {
+                          
+                        });
+                      }
+                    },),
                     SizedBox(
                       height: 20,
                     ),
@@ -307,7 +353,7 @@ class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
                           BusinessModel? newBusiness;
                           if(isUpdate){
                             newBusiness = await admController.putUpdateBusiness(
-                              businessId: int.parse(Get.parameters["id"] as String),
+                              businessId: businessId!,
                               businessModel: business,
                             );
                           } else {

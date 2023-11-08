@@ -10,11 +10,12 @@ class BusinessController extends GetxController {
 
   RxList<BusinessModel> business = <BusinessModel>[].obs;
   RxBool loadAllBusiness = false.obs;
+  RxList<BusinessModel> businessSearch = <BusinessModel>[].obs;
 
-
-  RxList<BusinessModel> get businessSearch {
+  changeSearch(){
     if(searchController.value.text.isEmpty || searchController.value.text == ""){
-      return business;
+      businessSearch.value = business;
+      businessSearch.refresh();
     } else {
       var list = business.where((busi){
         String text = searchController.value.text;
@@ -27,7 +28,8 @@ class BusinessController extends GetxController {
         if(busi.description?.toLowerCase().contains(text.toLowerCase()) == true) return true;
         return false;
       }).toList().obs;
-      return list;
+      businessSearch.value = list;
+      businessSearch.refresh();
     }
   }
 
@@ -36,6 +38,7 @@ class BusinessController extends GetxController {
     business.value = await businessRepository.getAllBusiness();
     business.refresh();
     if(business.isNotEmpty) loadAllBusiness.value = true;
+    changeSearch();
   }
 
   getOnlyBusiness({required int businessId}) async {

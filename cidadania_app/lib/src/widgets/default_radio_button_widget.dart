@@ -14,8 +14,9 @@ class DefaultRadioButtonWidget extends StatelessWidget {
     return Container(
       width: width ?? 300,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(labe, style: CustomStyle.medium,),
+          Text(labe, style: CustomStyle.medium, textAlign: TextAlign.start,),
           Column(
             children: list.map((e) => 
             Padding(

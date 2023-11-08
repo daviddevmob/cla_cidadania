@@ -1,17 +1,18 @@
-import 'package:carousel_images/carousel_images.dart';
+import 'dart:convert';
 import 'package:cidadania_app/src/controllers/business_controller.dart';
 import 'package:cidadania_app/src/models/business_model.dart';
-import 'package:cidadania_app/src/screens/view_photo_screen.dart';
+import 'package:cidadania_app/src/repositories/converter.dart';
 import 'package:cidadania_app/src/styles/color_style.dart';
 import 'package:cidadania_app/src/styles/text_style.dart';
 import 'package:cidadania_app/src/widgets/contact_service_widget.dart';
+import 'package:cidadania_app/src/widgets/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:get/get.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final int businessId;
-  const ProfileScreen({Key? key, required this.businessId}) : super(key: key);
+  const ProfileScreen({Key? key,}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -23,7 +24,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool loaded = false;
 
   getBusinessModel() async {
-    businessModel = await businessController.getOnlyBusiness(businessId: widget.businessId);
+    int id = int.parse(Get.parameters["id"] as String);
+    businessModel = await businessController.getOnlyBusiness(businessId: id);
     loaded = true;
     setState(() {
       
@@ -75,12 +77,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 15,
                 ),
                 CircleAvatar(
-                  radius: 100,
-                  backgroundColor: CustomColors.primaryColor,
-                  backgroundImage: NetworkImage(
-                    "https://plus.unsplash.com/premium_photo-1675604221054-6d1216f650a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
-                  ),
-                ),
+                      backgroundImage: businessModel.image == null
+                      ? null
+                      : MemoryImage(ConverterRepository.base64ToBytes(image: businessModel.image!)),
+                      radius: 100,
+                    ),
                 SizedBox(
                   height: 15,
                 ),
@@ -98,22 +99,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(
                   height: 15,
                 ),
-                CarouselImages(
-                  scaleFactor: 0.3,
-                  viewportFraction: .6,
-                  listImages: businessModel.images,
-                  height: 250,
-                  borderRadius: 30.0,
-                  cachedNetworkImage: true,
-                  verticalAlignment: Alignment.topLeft,
-                  onTap: (index) {
-                    Get.to(
-                      () => ViewPhotoScreen(
-                        url:
-                            "https://images.unsplash.com/photo-1504128668912-f893e6606db6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                Container(
+                  width: (Responsive.isDesktop(context) || Responsive.isLaptop(context)) ? 300 : null,
+                  child: FlutterCarousel(
+                    options: CarouselOptions(
+                      height: 300, 
+                      showIndicator: true,
+                      slideIndicator: CircularSlideIndicator(
+                        currentIndicatorColor: CustomColors.primaryColor,
+                        indicatorBackgroundColor: CustomColors.cardBackgroud,
                       ),
-                    );
-                  },
+                    ),
+                    items: businessModel.images.map((i) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Card(
+                            elevation: 5,
+                            child: Container(
+                              width: 300,
+                              margin: EdgeInsets.symmetric(horizontal: 5.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: CustomColors.cardBackgroud,
+                                image: DecorationImage(
+                                  image: MemoryImage(base64Decode(i)),
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
                 ),
                 SizedBox(
                   height: 30,
@@ -132,6 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   whatsApp: businessModel.whatsapp,
                   instagram: businessModel.instagram,
                   phone: businessModel.phone,
+                  map: businessModel.mapsLink,
                 ),
               ],
             ),

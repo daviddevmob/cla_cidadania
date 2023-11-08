@@ -1,7 +1,10 @@
 import 'package:cidadania_app/src/controllers/business_controller.dart';
+import 'package:cidadania_app/src/routes/route_name.dart';
 import 'package:cidadania_app/src/screens/adm/adm_business_screen.dart';
 import 'package:cidadania_app/src/styles/text_style.dart';
+import 'package:cidadania_app/src/widgets/custom_list_business_model.dart';
 import 'package:cidadania_app/src/widgets/default_button_widget.dart';
+import 'package:cidadania_app/src/widgets/search_business_widget.dart';
 import 'package:cidadania_app/src/widgets/tile_service_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,6 +30,8 @@ class _AdmHomeScreenState extends State<AdmHomeScreen> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 "Olá, Administrador do Coletivo Alpha!",
@@ -38,9 +43,13 @@ class _AdmHomeScreenState extends State<AdmHomeScreen> {
               DefaultButtonWidget(
                 title: "Adicionar novo negócio",
                 onTap: (){
-                  Get.to(() =>AdmBusinessScreen());
+                   Get.toNamed(RouteName.adm_business);
                 },
               ),
+              SizedBox(
+                height: 10,
+              ),
+              SearchBusinessWidget(),
               SizedBox(
                 height: 10,
               ),
@@ -48,14 +57,7 @@ class _AdmHomeScreenState extends State<AdmHomeScreen> {
                 if(!businessController.loadAllBusiness.value){
                   return CircularProgressIndicator.adaptive();
                 } else {
-                  return Obx(
-                    () => ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: businessController.businessSearch.length,
-                      physics: ScrollPhysics(),
-                      itemBuilder: (context, index) => TileServiceWidget(businessModel: businessController.businessSearch[index],isAdm: true,),
-                    ),
-                  );
+                  return CustomListBusinessModel(isAdm: true,);
                 }
               }),
             ],

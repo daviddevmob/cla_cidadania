@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 4)).then((value)async {
-      Get.toNamed(RouteName.adm);
+      Get.toNamed(RouteName.adm_home);
        /* await businessController.getAllBusiness();
       Get.off(() => HomeScreen()); */
     });

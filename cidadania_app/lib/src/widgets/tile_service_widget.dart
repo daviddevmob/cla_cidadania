@@ -20,7 +20,7 @@ class TileServiceWidget extends StatelessWidget {
         if(isAdm){
           Get.toNamed(RouteName.adm_business, parameters: {"id": businessModel.id.toString(),});
         } else {
-          Get.to(()=> ProfileScreen(businessId: businessModel.id,));
+          Get.toNamed(RouteName.profile, parameters: {"id": businessModel.id.toString(),});
         }
       },
       leading: CircleAvatar(

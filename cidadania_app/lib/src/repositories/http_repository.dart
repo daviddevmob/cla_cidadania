@@ -48,9 +48,9 @@ class HttpRepository implements HttpRepositoryInterface{
   }
   
   @override
-  Future put({required String path, Map<String, dynamic>? data}) async {
+  Future patch({required String path, Map<String, dynamic>? data}) async {
     try{
-      var result = await dio.put(RouteApi.baseURL + path, data: data);
+      var result = await dio.patch(RouteApi.baseURL + path, data: data);
       return result.data;
     }catch(e){
       debugPrint(e.toString());

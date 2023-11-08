@@ -39,7 +39,7 @@ class BusinessRepository implements BusinessRepositoryInterface {
   @override
   Future<BusinessModel?> putBusiness({required BusinessModel businessModel}) async {
     try{
-      var result = await http.put(
+      var result = await http.patch(
         path: "${RouteApi.business}${businessModel.id}", 
         data: businessModel.toJson()
       );

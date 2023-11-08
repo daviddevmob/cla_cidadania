@@ -26,6 +26,6 @@ class ConverterRepository {
   }
 
   static base64ToBytes<Uint8List>({required String image}) {
-    return base64Decode(image.split("base64,").last);
+    return base64Decode(image);
   }
 }
