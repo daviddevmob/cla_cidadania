@@ -10,7 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.5
   bootstrap_icons: ^1.11.1
   google_fonts: ^6.1.0
   hexcolor: ^2.0.7
@@ -22,13 +21,23 @@ dependencies:
   image_compression_flutter: ^1.0.3
   flutter_carousel_widget: ^2.1.2
   url_launcher: ^6.1.14
+  firebase_core: ^2.21.0
+  cloud_firestore: ^4.12.2
+  flutter_mobx: ^2.1.1
+  mobx: ^2.2.1
+  routefly: ^1.0.5
+  auto_injector: ^2.0.2
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  build_runner:
+  mobx_codegen: ^2.4.0
 
 flutter:
   uses-material-design: true
   assets:
     - assets/logo.json
+    - assets/load.json
