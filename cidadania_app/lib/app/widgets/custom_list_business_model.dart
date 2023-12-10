@@ -2,9 +2,9 @@ import 'package:cidadania_app/app/controllers/business_controller.dart';
 import 'package:cidadania_app/app/widgets/card_service_widget.dart';
 import 'package:cidadania_app/app/widgets/responsive.dart';
 import 'package:cidadania_app/app/widgets/tile_service_widget.dart';
-import 'package:cidadania_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
 class CustomListBusinessModel extends StatelessWidget {
   final bool isAdm;
@@ -12,7 +12,7 @@ class CustomListBusinessModel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BusinessController businessController = autoInjector.get<BusinessController>(key: 'business');
+    final BusinessController businessController = GetIt.I.get<BusinessController>();
     if(Responsive.isDesktop(context) || Responsive.isLaptop(context) ){
       return Observer(builder:(_) {
           return GridView(

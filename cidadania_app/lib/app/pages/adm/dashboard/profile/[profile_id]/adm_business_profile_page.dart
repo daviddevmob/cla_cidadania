@@ -2,6 +2,7 @@ import 'package:cidadania_app/app/controllers/adm_controller.dart';
 import 'package:cidadania_app/app/controllers/business_controller.dart';
 import 'package:cidadania_app/app/models/business_model.dart';
 import 'package:cidadania_app/app/repositories/converter.dart';
+import 'package:cidadania_app/app/routes/route_name.dart';
 import 'package:cidadania_app/app/styles/color_style.dart';
 import 'package:cidadania_app/app/styles/text_style.dart';
 import 'package:cidadania_app/app/widgets/default_button_widget.dart';
@@ -9,8 +10,9 @@ import 'package:cidadania_app/app/widgets/default_dropdown_button_widget.dart';
 import 'package:cidadania_app/app/widgets/default_filters_widget.dart';
 import 'package:cidadania_app/app/widgets/default_radio_button_widget.dart';
 import 'package:cidadania_app/app/widgets/default_textfield_widget.dart';
-import 'package:cidadania_app/main.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:routefly/routefly.dart';
 import 'package:uuid/uuid.dart';
 
@@ -22,8 +24,8 @@ class AdmBusinessScreen extends StatefulWidget {
 }
 
 class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
-  final BusinessController businessController = autoInjector.get<BusinessController>(key: 'business');
-  final AdmController admController = autoInjector.get<AdmController>();
+  final BusinessController businessController = GetIt.I.get<BusinessController>();
+  final AdmController admController = GetIt.I.get<AdmController>();
   TextEditingController name = TextEditingController();
   TextEditingController businessName = TextEditingController();
   TextEditingController businessAddress = TextEditingController();
@@ -46,9 +48,9 @@ class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
 
   getData() async {
     BusinessModel? businessModel;
-    isUpdate =  Routefly.query.params.containsKey("id");
+    isUpdate =  Routefly.query["profile_id"].toString() != "[profile_id]";
     if(isUpdate){
-      businessId = Routefly.query["id"] as String;
+      businessId = Routefly.query["profile_id"] as String;
       businessModel = await businessController.getOnlyBusiness(businessId: businessId);
     } else {
       businessId = Uuid().v4();
@@ -83,12 +85,28 @@ class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
 
   @override
   void dispose() {
-    
     super.dispose();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Routefly.navigate(RouteName.adm_home);
+          },
+          icon: Icon(
+            CupertinoIcons.back,
+            color: CustomColors.primaryColor,
+          ),
+        ),
+        title: Text(
+          !isUpdate  ? "Adicionar Negócio" : "Editar Négocio",
+          style: CustomStyle.title.copyWith(
+            color: CustomColors.primaryColor,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -378,12 +396,31 @@ class _AdmBusinessScreenState extends State<AdmBusinessScreen> {
                               businessController.business.add(newBusiness);
                             }
                           }
-                          Routefly.pop(context);
+                          businessController.changeSearch();
+                          Routefly.navigate(RouteName.adm_home);
                           }
                         } catch(e){
                           debugPrint(e.toString());
                         }
                       },
+                    ),
+                    if(isUpdate)
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 20,
+                      ),
+                      child: DefaultButtonWidget(
+                        title: "Deletar",
+                        customColor: Colors.red,
+                        onTap: () async {
+                          var result = await admController.delDeleteBusiness(businessId: businessId, context: context);
+                          if(result){
+                            businessController.business.where((element) => element.id == businessId);
+                            businessController.changeSearch();
+                          }
+                          Routefly.navigate(RouteName.adm_home);
+                        },
+                      ),
                     )
                   ],
                 ),

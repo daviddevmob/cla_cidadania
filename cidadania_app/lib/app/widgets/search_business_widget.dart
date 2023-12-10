@@ -1,16 +1,16 @@
 import 'package:cidadania_app/app/controllers/business_controller.dart';
 import 'package:cidadania_app/app/styles/color_style.dart';
 import 'package:cidadania_app/app/widgets/responsive.dart';
-import 'package:cidadania_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
 class SearchBusinessWidget extends StatelessWidget {
   const SearchBusinessWidget({super.key,});
 
   @override
   Widget build(BuildContext context) {
-    final BusinessController businessController = autoInjector.get<BusinessController>(key: 'business');
+    final BusinessController businessController = GetIt.I.get<BusinessController>();
     return  Container(
                   height: 40,
                   width: (Responsive.isDesktop(context) || Responsive.isLaptop(context)) ? 400 : null,

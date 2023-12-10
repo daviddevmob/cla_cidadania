@@ -16,9 +16,9 @@ class CardServiceWidget extends StatelessWidget {
     return InkWell(
       onTap: (){
         if(isAdm){
-          Routefly.push(RouteName.adm_business, arguments: {"id": businessModel.id.toString(),});
+          Routefly.navigate(RouteName.adm_business.replaceAll("[profile_id]", businessModel.id.toString()));
         } else {
-          Routefly.push(RouteName.profile, arguments: {"id": businessModel.id.toString(),});
+          Routefly.navigate(RouteName.profile.replaceAll("[profile_id]", businessModel.id.toString()));
         }
       },
       child: Card(

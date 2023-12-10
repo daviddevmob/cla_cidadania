@@ -29,13 +29,13 @@ mixin _$BusinessController on _BusinessController, Store {
       Atom(name: '_BusinessController.business', context: context);
 
   @override
-  List<BusinessModel> get business {
+  ObservableList<BusinessModel> get business {
     _$businessAtom.reportRead();
     return super.business;
   }
 
   @override
-  set business(List<BusinessModel> value) {
+  set business(ObservableList<BusinessModel> value) {
     _$businessAtom.reportWrite(value, super.business, () {
       super.business = value;
     });
@@ -61,13 +61,13 @@ mixin _$BusinessController on _BusinessController, Store {
       Atom(name: '_BusinessController.businessSearch', context: context);
 
   @override
-  List<BusinessModel> get businessSearch {
+  ObservableList<BusinessModel> get businessSearch {
     _$businessSearchAtom.reportRead();
     return super.businessSearch;
   }
 
   @override
-  set businessSearch(List<BusinessModel> value) {
+  set businessSearch(ObservableList<BusinessModel> value) {
     _$businessSearchAtom.reportWrite(value, super.businessSearch, () {
       super.businessSearch = value;
     });
@@ -85,9 +85,18 @@ mixin _$BusinessController on _BusinessController, Store {
       AsyncAction('_BusinessController.getOnlyBusiness', context: context);
 
   @override
-  Future getOnlyBusiness({required String businessId}) {
+  Future<BusinessModel?> getOnlyBusiness({required String businessId}) {
     return _$getOnlyBusinessAsyncAction
         .run(() => super.getOnlyBusiness(businessId: businessId));
+  }
+
+  late final _$deleteBusinessAsyncAction =
+      AsyncAction('_BusinessController.deleteBusiness', context: context);
+
+  @override
+  Future deleteBusiness({required String businessId}) {
+    return _$deleteBusinessAsyncAction
+        .run(() => super.deleteBusiness(businessId: businessId));
   }
 
   late final _$_BusinessControllerActionController =

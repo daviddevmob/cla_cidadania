@@ -2,6 +2,8 @@ import 'package:cidadania_app/app/models/business_model.dart';
 import 'package:cidadania_app/app/repositories/business/business_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
+import 'package:collection/collection.dart'; 
+
 
 part 'business_controller.g.dart';
 
@@ -13,11 +15,11 @@ abstract class _BusinessController with Store {
   TextEditingController searchController = TextEditingController();
 
   @observable
-  List<BusinessModel> business = <BusinessModel>[];
+  ObservableList<BusinessModel> business = <BusinessModel>[].asObservable();
   @observable
   bool loadAllBusiness = false;
   @observable
-  List<BusinessModel> businessSearch = <BusinessModel>[];
+  ObservableList<BusinessModel> businessSearch = <BusinessModel>[].asObservable();
 
   @action
   changeSearch(){
@@ -35,25 +37,33 @@ abstract class _BusinessController with Store {
         if(busi.description?.toLowerCase().contains(text.toLowerCase()) == true) return true;
         return false;
       }).toList();
-      businessSearch = list;
+      businessSearch.clear();
+      businessSearch.addAll(list);
     }
   }
 
   @action
   getAllBusiness() async {
     if(business.isEmpty)
-    business = await businessRepository.getAllBusiness();
+    business.addAll(await businessRepository.getAllBusiness());
     if(business.isNotEmpty) loadAllBusiness = true;
     changeSearch();
   }
 
   @action
-  getOnlyBusiness({required String businessId}) async {
+  Future<BusinessModel?> getOnlyBusiness({required String businessId}) async {
     if(loadAllBusiness){
-      return business.firstWhere((element) => element.id == businessId);
+      return business.firstWhereOrNull((element) => element.id == businessId);
     } else {
       await getAllBusiness();
-      return business.firstWhere((element) => element.id == businessId);
+      return business.firstWhereOrNull((element) => element.id == businessId);
     }
+  }
+
+  @action
+  deleteBusiness({required String businessId}) async {
+    deleteBusiness(businessId: businessId);
+    business.removeWhere((element) => element.id == businessId);
+    return true;
   }
 }

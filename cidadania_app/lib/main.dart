@@ -1,14 +1,12 @@
-import 'package:auto_injector/auto_injector.dart';
-import 'package:cidadania_app/app/controllers/adm_controller.dart';
-import 'package:cidadania_app/app/controllers/business_controller.dart';
+import 'package:cidadania_app/app/routes/route_middleware.dart';
 import 'package:cidadania_app/app/routes/route_page.dart';
 import 'package:cidadania_app/app/styles/color_style.dart';
+import 'package:cidadania_app/app_injectors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:routefly/routefly.dart';
 
-final autoInjector = AutoInjector();
 
 void main()async  {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,10 +21,7 @@ void main()async  {
       measurementId: "G-S368MHRX52"
     ),
   );
-
-  autoInjector.add(BusinessController.new,key: 'business');
-  autoInjector.add(AdmController.new, key: 'adm');
-  autoInjector.commit();
+  AppIntectors.instance.initialize();
   await GetStorage.init();
   runApp(const MyApp());
 }
@@ -38,7 +33,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Cidadania',
-      routerConfig: Routefly.routerConfig(routes: RoutePages.pages),
+      routerConfig: Routefly.routerConfig(
+        routes: RoutePages.pages,
+        middlewares: [AppRouteMiddleware().guardRoute]
+      ),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: AppBarTheme(

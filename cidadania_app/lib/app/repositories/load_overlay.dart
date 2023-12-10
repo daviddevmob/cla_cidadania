@@ -1,5 +1,8 @@
+import 'package:cidadania_app/app/repositories/converter.dart';
 import 'package:cidadania_app/app/styles/color_style.dart';
 import 'package:cidadania_app/app/styles/text_style.dart';
+import 'package:cidadania_app/app/widgets/responsive.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -34,5 +37,40 @@ class LoadOverlay {
             ),
              ),
        ),);
+  }
+
+  static showImage({required String url, required BuildContext context}) async {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_){
+        return Dialog(
+          backgroundColor: CustomColors.backgroudColor,
+          child: Stack(
+            children: [
+              Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: MemoryImage(ConverterRepository.base64ToBytes(image: url)),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+              Align(
+                alignment: Alignment.topRight,
+                child: TextButton(onPressed: (){
+                  Navigator.pop(context);
+                  }, 
+                  child: Text(
+                    "Fechar",
+                    style: CustomStyle.medium,
+                  )
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    );
   }
 }

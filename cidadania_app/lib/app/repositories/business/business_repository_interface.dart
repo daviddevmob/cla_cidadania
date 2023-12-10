@@ -5,6 +5,9 @@ abstract class BusinessRepositoryInterface {
   Future getAllBusiness();
   Future getOnlyBusiness({required int businessId,required BuildContext context});
   Future<BusinessModel?> putBusiness({required BusinessModel businessModel,required BuildContext context});
-  Future deleteBusiness({required int businessId,required BuildContext context});
+  Future deleteBusiness({required String businessId,required BuildContext context});
   Future<BusinessModel?> addBusiness({required BusinessModel businessModel,required BuildContext context});
+  Future<bool> necessaryUpdate();
+  Future syncLocalDB({required List<Map<String,dynamic>> business});
+  Future getLocalBusiness();
 }

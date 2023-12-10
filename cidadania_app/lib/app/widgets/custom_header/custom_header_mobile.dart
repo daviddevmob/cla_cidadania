@@ -1,8 +1,11 @@
+import 'package:cidadania_app/app/controllers/adm_controller.dart';
 import 'package:cidadania_app/app/routes/route_name.dart';
+import 'package:cidadania_app/app/styles/color_style.dart';
 import 'package:cidadania_app/app/styles/text_style.dart';
 import 'package:cidadania_app/app/widgets/default_button_widget.dart';
 import 'package:cidadania_app/app/widgets/search_business_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:routefly/routefly.dart';
 
 class CustomHeaderMobile extends StatelessWidget {
@@ -10,6 +13,7 @@ class CustomHeaderMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  final AdmController admController = GetIt.I.get<AdmController>();
     return Column(
       children: [
         Text(
@@ -19,11 +23,37 @@ class CustomHeaderMobile extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        DefaultButtonWidget(
-          title: "Adicionar novo negócio",
-          onTap: (){
-            Routefly.push(RouteName.adm_business);
-          },
+        Column(
+          children: [
+            DefaultButtonWidget(
+              title: "Adicionar negócio",
+              onTap: (){
+                Routefly.navigate(RouteName.adm_business);
+              },
+              customColor: CustomColors.textColor,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            DefaultButtonWidget(
+              title: "Ver como cliente",
+              onTap: () async {
+                Routefly.navigate(RouteName.home);
+              },
+              customColor: CustomColors.textColor,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            DefaultButtonWidget(
+              title: "Sair do Modo Administrador",
+              onTap: () async {
+                await admController.localDB.updateData(data: false, key: "adm_mode");
+                Routefly.navigate(RouteName.home);
+              },
+              customColor: CustomColors.textColor,
+            ),
+          ],
         ),
         SizedBox(
           height: 20,

@@ -2,8 +2,8 @@ import 'package:cidadania_app/app/controllers/business_controller.dart';
 import 'package:cidadania_app/app/routes/route_name.dart';
 import 'package:cidadania_app/app/styles/color_style.dart';
 import 'package:cidadania_app/app/styles/text_style.dart';
-import 'package:cidadania_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
 import 'package:routefly/routefly.dart';
 
@@ -15,7 +15,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final BusinessController businessController = autoInjector.get<BusinessController>(key: 'business');
+  final BusinessController businessController = GetIt.I.get<BusinessController>();
 
 
   @override

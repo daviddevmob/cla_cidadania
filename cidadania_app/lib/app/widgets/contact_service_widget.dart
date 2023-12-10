@@ -30,7 +30,11 @@ class ContactServiceWidget extends StatelessWidget {
             ? null
             : () async {  
               try{
-                Uri uri = Uri.parse("https://api.whatsapp.com/send/?phone=$whatsApp");
+                String whastAppResult = whatsApp!
+                .replaceAll(RegExp("/\+/\d{3}[ ]?(/\d+(-| )?)+"), "")
+                .replaceAll(RegExp(r"\s+\b|\b\s"), "")
+                .replaceAll(RegExp('[^0-9]'), '');
+                Uri uri = Uri.parse("https://api.whatsapp.com/send/?phone=$whastAppResult");
               await launchUrl(uri);
               }catch(e){
                 
@@ -63,7 +67,8 @@ class ContactServiceWidget extends StatelessWidget {
             ? null
             : () async {  
               try{
-                Uri uri = Uri.parse("$instagram");
+                String instagramResult = instagram!.contains(".com/") ? instagram! : "https://www.instagram.com/$instagram";
+                Uri uri = Uri.parse("$instagramResult");
               await launchUrl(uri);
               }catch(e){
     
@@ -96,7 +101,7 @@ class ContactServiceWidget extends StatelessWidget {
             ? null
             : () async {  
               try{
-                Uri uri = Uri.parse("tel:$phone");
+              Uri uri = Uri.parse("tel:$phone");
               await launchUrl(uri);
               }catch(e){
     
